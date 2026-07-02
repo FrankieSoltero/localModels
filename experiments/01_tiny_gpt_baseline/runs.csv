@@ -1,0 +1,5 @@
+tag,device,params,iters,tokens,wallclock_s,tokens_per_s,val_loss,est_flops
+smoke,cpu,842752,30,245760,17.5,14023,3.1115,1.243e+12
+baseline-cpu,cpu,842752,3000,24576000,1693.0,14516,1.8541,1.243e+14
+smoke-gpu,cuda,842752,200,1638400,11.9,138203,2.5372,8.285e+12
+baseline-gpu,cuda,842752,3000,24576000,146.8,167417,1.8634,1.243e+14

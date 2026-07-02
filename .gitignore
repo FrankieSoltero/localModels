@@ -1,0 +1,17 @@
+# Python virtual environments
+modelEnv/
+modelEnvGpu/
+__pycache__/
+*.pyc
+
+# Claude Code local session config (machine-specific)
+.claude/
+
+# Large artifacts — datasets and checkpoints stay local
+data/
+models/
+*.pt
+*.safetensors
+*.gguf
+
+# Benchmark/run outputs are logged in experiment folders' runs.csv (kept in git)

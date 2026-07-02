@@ -1,0 +1,4 @@
+tag,device,dtype,params,iters,tokens,wallclock_s,tokens_per_s,val_loss,est_flops
+smoke,cuda,bf16,842752,30,245760,3.8,63984,3.1162,1.243e+12
+bf16-gpu,cuda,bf16,842752,3000,24576000,84.6,290645,1.8639,1.243e+14
+bf16-cpu,cpu,bf16,842752,3000,24576000,1264.6,19434,1.8543,1.243e+14
