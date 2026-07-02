@@ -27,7 +27,10 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
   (The pre-fix checkpoint keeps its old name `tiny_gpt_baseline.pt` — pass `--ckpt` to load it.)
 - ✅ Docs updated: ROADMAP checkboxes, RESULTS.md end-to-end table + takeaways.
 - ⏸ Phase 1 scale-check item still open (larger corpus). Phase 2 items 2-5 not started.
-- ⚠ Git: still **zero commits** — user hasn't asked for a commit; don't commit without asking.
+- ✅ **Published** (2026-07-02): public repo <https://github.com/FrankieSoltero/localModels>,
+  initial commit `9bb57bc`, MIT license. Audit findings remediated (pinned data URL, Qwen
+  attribution in README, `.gitignore` covers both venvs + `.claude/`). Commit signing is
+  disabled globally (`commit.gpgsign false`) — pushes authenticate via the `gh` HTTPS token.
 
 ## 3. Decisions + why
 
@@ -50,7 +53,7 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
 2. Or (user's call) **install `transformers`+`peft` into `modelEnvGpu`** and start the LoRA
    experiment on Qwen2.5-3B (`inference/qwen_chat.py` proves the model runs locally).
 3. Phase 1 scale check (larger corpus) — still open on the roadmap.
-4. Consider the **initial git commit** (repo has zero commits; ask user first).
+4. Commit and push results to GitHub as they land (repo is public; commits unsigned by design).
 5. Keep `research/ROADMAP.md` checkboxes and memory file in sync as results land.
 
 ## 5. Files (touchpoints with line refs)
@@ -97,8 +100,6 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
 
 ## 7. Open questions
 
-- **Initial git commit** — repo has zero commits; user hasn't said whether/when to commit or
-  whether this should get a GitHub remote.
 - **Next experiment: 03 low-rank (self-contained) or LoRA (needs installs)?** User's call.
 - Phase 4 distillation will need an enterprise-model API budget — unasked.
 
@@ -116,7 +117,7 @@ Get-Content experiments\01_tiny_gpt_baseline\runs.csv
 Get-Content experiments\02_mixed_precision\runs.csv
 ```
 
-- Branch: `main`, no commits yet, no remote.
+- Branch: `main`, tracks `origin/main` → <https://github.com/FrankieSoltero/localModels> (public).
 - **User preference: he runs training commands in his own terminal and pastes results.**
   Hand over ready-to-paste PowerShell 5.1 commands with explicit venv paths.
 - Session memory: `~\.claude\projects\C--Users-Francisco-Soltero-Desktop-localModels\memory\`
