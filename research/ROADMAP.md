@@ -41,7 +41,12 @@ Each gets an `experiments/NN_*` folder benchmarked against Phase 1:
       parity (`experiments/02_mixed_precision/runs.csv`). End-to-end gains lag the
       matmul-level ceilings (8.5×/3.5×) because the 0.84M model is overhead-dominated —
       expect the gap to close at larger scale.
-- [ ] **Low-rank factorization** — replace W (d×d) with A·B (d×r · r×d); FLOPs drop ~r/d.
+- [x] **Low-rank factorization** — tested (2026-07-02), **negative result at this scale**:
+      factorizing the MLP linears (r ∈ {64, 32, 8}) buys only 1.07–1.25× wall-clock at
+      +0.15–0.37 val-loss cost; every configuration is Pareto-dominated by plain bf16
+      autocast (84.6 s @ 1.8639). A ~57% FLOP cut converted to just ~20% time saved —
+      overhead-bound at 0.84M params (`experiments/03_low_rank/runs.csv`). Revisit at
+      larger scale where matmul actually dominates wall-clock.
 - [ ] **LoRA fine-tuning** — low-rank *updates*: full-model quality, tiny trainable footprint.
 - [ ] **QLoRA** — 4-bit frozen base + LoRA; the standard way to fine-tune 3–7B models on
       consumer hardware.

@@ -39,3 +39,22 @@ actual parameter count, which shrinks with rank).
   (6·N·T) scales with the reduced N accordingly.
 - Foundation for LoRA (next in Phase 2): same factorization idea applied to
   weight *updates* on a frozen full-rank model instead of the weights themselves.
+
+## Results (2026-07-02) — negative result
+
+Control: `baseline-gpu` — 842,752 params, 146.8 s, val loss 1.8634.
+
+| rank | params | wall-clock | tok/s | val loss | time saved | loss cost |
+|---:|---:|---:|---:|---:|---|---|
+| 64 | 646,144 | 137.8 s | 178,385 | 2.0126 | 1.07× | +0.149 |
+| 32 | 482,304 | 123.8 s | 198,588 | 2.1205 | 1.19× | +0.257 |
+| 8 | 359,424 | 117.2 s | 209,772 | 2.2374 | 1.25× | +0.374 |
+
+**Verdict:** low-rank factorization loses on both axes at this scale. r=8 cuts
+theoretical FLOPs ~57% but saves only ~20% wall-clock — the removed FLOPs were
+not the bottleneck (overhead-bound, consistent with exp 02's Amdahl gap). Every
+point is Pareto-dominated by exp 02's bf16 autocast (84.6 s @ 1.8639): faster
+AND better-quality than all three ranks. At 0.84M params, precision beats
+capacity-cutting decisively. Caveat: scale-dependent — worth a re-test on models
+where matmul dominates wall-clock.
+

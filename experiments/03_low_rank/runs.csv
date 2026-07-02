@@ -1,0 +1,4 @@
+tag,device,rank,params,iters,tokens,wallclock_s,tokens_per_s,val_loss,est_flops
+lowrank-r64-gpu,cuda,64,646144,3000,24576000,137.8,178385,2.0126,9.528e+13
+lowrank-r32-gpu,cuda,32,482304,3000,24576000,123.8,198588,2.1205,7.112e+13
+lowrank-r8-gpu,cuda,8,359424,3000,24576000,117.2,209772,2.2374,5.300e+13

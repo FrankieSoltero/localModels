@@ -10,9 +10,9 @@
 RX 9060 XT) that let small models approach enterprise-model quality on narrow tasks, by
 attacking matrix-multiplication cost. Full plan: `research/ROADMAP.md`.
 
-**Task in flight:** pick and run the next Phase 2 experiment — low-rank factorization
-(`03_low_rank`) is the natural next one-variable step; LoRA on Qwen2.5-3B is the bigger
-prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
+**Task in flight:** LoRA fine-tuning on Qwen2.5-3B — the next Phase 2 experiment.
+Prereq: install `transformers`+`peft` into `modelEnvGpu`, and pick the narrow
+fine-tuning task/dataset. Experiments 02 (bf16 win) and 03 (low-rank negative) are done.
 
 ## 2. Status
 
@@ -26,7 +26,11 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
 - ✅ `train.py --ckpt` fix landed: runs save to `models/<tag>.pt`, no more clobbering.
   (The pre-fix checkpoint keeps its old name `tiny_gpt_baseline.pt` — pass `--ckpt` to load it.)
 - ✅ Docs updated: ROADMAP checkboxes, RESULTS.md end-to-end table + takeaways.
-- ⏸ Phase 1 scale-check item still open (larger corpus). Phase 2 items 2-5 not started.
+- ✅ **Experiment 03 (low-rank MLP) done — clean negative result**: r ∈ {64, 32, 8}
+  gives only 1.07–1.25× wall-clock at +0.15–0.37 val-loss cost; every point is
+  Pareto-dominated by bf16-gpu (84.6 s @ 1.8639). `03_low_rank/runs.csv` + README verdict.
+- ⏸ Phase 1 scale-check item still open (larger corpus). Phase 2 remaining: LoRA, QLoRA,
+  gradient checkpointing / fused optimizers.
 - ✅ **Published** (2026-07-02): public repo <https://github.com/FrankieSoltero/localModels>,
   initial commit `9bb57bc`, MIT license. Audit findings remediated (pinned data URL, Qwen
   attribution in README, `.gitignore` covers both venvs + `.claude/`). Commit signing is
@@ -47,11 +51,10 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
 
 ## 4. Ordered next steps
 
-1. **Create `experiments/03_low_rank/`** — replace each `nn.Linear(d, d)`-ish projection
-   with A·B factorization (rank r sweep, e.g. r ∈ {8, 32, 64}); copy of baseline loop,
-   one variable changed. Compare vs `baseline-gpu` at 24.6M tokens; log to its own runs.csv.
-2. Or (user's call) **install `transformers`+`peft` into `modelEnvGpu`** and start the LoRA
-   experiment on Qwen2.5-3B (`inference/qwen_chat.py` proves the model runs locally).
+1. **Install `transformers`+`peft` into `modelEnvGpu`** (user runs the pip command).
+2. **Design the LoRA experiment** (`experiments/04_lora/`): pick the narrow task +
+   dataset, define the evaluation, fine-tune Qwen2.5-3B with LoRA on the GPU.
+   Note exp 03's lesson: run training in bf16 autocast (the one confirmed win).
 3. Phase 1 scale check (larger corpus) — still open on the roadmap.
 4. Commit and push results to GitHub as they land (repo is public; commits unsigned by design).
 5. Keep `research/ROADMAP.md` checkboxes and memory file in sync as results land.
@@ -100,7 +103,7 @@ prize but needs `transformers`+`peft` installed into `modelEnvGpu` first.
 
 ## 7. Open questions
 
-- **Next experiment: 03 low-rank (self-contained) or LoRA (needs installs)?** User's call.
+- **Which narrow task/dataset for the LoRA fine-tune** (and later Phase 4 distillation)? User's call.
 - Phase 4 distillation will need an enterprise-model API budget — unasked.
 
 ## 8. Resume & verify
@@ -115,6 +118,9 @@ Get-Content experiments\01_tiny_gpt_baseline\runs.csv
 
 # (expect 3 data rows: smoke / bf16-gpu / bf16-cpu)
 Get-Content experiments\02_mixed_precision\runs.csv
+
+# (expect 3 data rows: lowrank-r64/r32/r8-gpu)
+Get-Content experiments\03_low_rank\runs.csv
 ```
 
 - Branch: `main`, tracks `origin/main` → <https://github.com/FrankieSoltero/localModels> (public).
