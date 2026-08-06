@@ -129,3 +129,5 @@ Get-Content experiments\03_low_rank\runs.csv
 - Session memory: `~\.claude\projects\C--Users-Francisco-Soltero-Desktop-localModels\memory\`
   (`llm-training-efficiency-research.md`, `user-runs-commands-himself.md`) — updated 2026-07-02.
 - Plans/specs: `research/ROADMAP.md` is the spec; this file is the resume packet.
+- **Active code-by-hand session:** `.code-by-hand.md` at repo root is the live typing-session state
+  for the style-tuning engine build (plan: `Docs/superpowers/plans/2026-08-06-style-tuning-engine.md`).
